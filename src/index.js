@@ -25,9 +25,9 @@ app.post("/getuser", async (req, res) => {
   }
 });
 app.post("/loginuser", async (req, res) => {
-  const { email } = req.body;
-  if (email) {
-    const data = await UserModel.findOne({ email: email });
+  const { email, password } = req.body;
+  if (email,password) {
+    const data = await UserModel.findOne({ email: email, password: password });
     res.send(data);
   }
   else {

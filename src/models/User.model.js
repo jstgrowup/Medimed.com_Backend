@@ -4,6 +4,7 @@ const UserSchema = new Schema({
    lastName: { type: String, required: true },
    email: { type: String, required: true },
    userid: { type: String, required: true },
+   password: { type: String, required: true },
    imageURL: String
 });
 const UserModel = model("user", UserSchema);
