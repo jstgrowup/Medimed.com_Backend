@@ -26,9 +26,15 @@ app.post("/getuser", async (req, res) => {
 });
 app.post("/loginuser", async (req, res) => {
   const { email, password } = req.body;
-  if (email,password) {
-    const data = await UserModel.findOne({ email: email, password: password });
-    res.send(data);
+
+  if (email, password) {
+    try {
+      const data = await UserModel.findOne({ email: email, password: password });
+      res.send(data);
+
+    } catch (error) {
+      res.status(500).send("wrong credentials");
+    }
   }
   else {
     res.status(400).send({
