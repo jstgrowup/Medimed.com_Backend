@@ -24,6 +24,18 @@ app.post("/getuser", async (req, res) => {
     });
   }
 });
+app.post("/loginuser", async (req, res) => {
+  const { email } = req.body;
+  if (email) {
+    const data = await UserModel.findOne({ email: email });
+    res.send(data);
+  }
+  else {
+    res.status(400).send({
+      message: "Please provide a userid"
+    });
+  }
+});
 app.post("/postUserViaForm", async (req, res) => {
   const { userid } = req.body;
   if (userid) {
