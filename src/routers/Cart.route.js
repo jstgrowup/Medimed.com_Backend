@@ -8,15 +8,15 @@ const app = express.Router();
 //   }
 //auth
 const authMiddleware = (req, res, next) => {
-  let userId = req.headers.userid;
+    let userId = req.headers.userid;
 
-  if (userId) {
-    req.userId=userId
-    next()
-  } else {
-  return res.status(401).send("user not authorise")
+    if (userId) {
+        req.userId = userId
+        next()
+    } else {
+        return res.status(401).send("user not authorise")
 
-  }
+    }
 };
 
 
@@ -31,47 +31,47 @@ app.get("/", async (req, res) => {
     // console.log(req.userId)
 
 
-  let data = await CartModel.find({userId:req.userId}).populate(["userId", "productId"]);
-  return res.send(data);
+    let data = await CartModel.find({ userId: req.userId }).populate(["userId", "productId"]);
+    return res.send(data);
 });
 
 
 app.post("/create", async (req, res) => {
 
-  let {productId,quantity}= req.body
-  let userId=req.userId
+    let { productId, quantity } = req.body
+    let userId = req.userId
 
-    let existingcartItems=await CartModel.findOne({userId,productId})
-    
-    if(existingcartItems)
+    let existingcartItems = await CartModel.findOne({ userId, productId })
+
+    if (existingcartItems)
     // update if exist
     {
-     
-        try{
-            let update = await CartModel.findByIdAndUpdate(existingcartItems._id,{$set:{quantity:existingcartItems.quantity+1}});
+
+        try {
+            let update = await CartModel.findByIdAndUpdate(existingcartItems._id, { $set: { quantity: existingcartItems.quantity + 1 } });
             // let updatedData=await CartModel.findById(existingcartItems.id)
-            return  res.send({
-                message:"item added successfully"
+            return res.send({
+                message: "item added successfully"
             })
 
-        }catch(e){
-           return  res.status(401).send(e.message)
+        } catch (e) {
+            return res.status(401).send(e.message)
         }
 
-    }else{
+    } else {
         // create id not exist 
-try{
+        try {
 
-    let data=await CartModel.create({productId,quantity,userId})
-    return  res.send({
-        message:"item created successfully"
-    })
-}catch(e){
-    return  res.status(500).send(e.message)
-}
-  }
+            let data = await CartModel.create({ productId, quantity, userId })
+            return res.send({
+                message: "item created successfully"
+            })
+        } catch (e) {
+            return res.status(500).send(e.message)
+        }
+    }
 
-    })
+})
 
 
 
@@ -79,36 +79,35 @@ try{
 
 
 // patch 
-app.post("/update",async(req,res)=>{
-    let {type,productId}= req.body
-    let userId=req.headers.userid
+app.post("/update", async (req, res) => {
+    let { type, productId } = req.body
+    let userId = req.headers.userid
     // console.log(type,productId,userId)
     // console.log(123456)
-    let existingcartItems=await CartModel.findOne({userId,productId})
-    try{
+    let existingcartItems = await CartModel.findOne({ userId, productId })
+    try {
 
-        if(type==="dec")
-        {
+        if (type === "dec") {
 
-            let updatedData=await CartModel.findByIdAndUpdate(existingcartItems._id,{$set:{quantity:existingcartItems.quantity-1}})
+            let updatedData = await CartModel.findByIdAndUpdate(existingcartItems._id, { $set: { quantity: existingcartItems.quantity - 1 } })
             console.log(existingcartItems)
-              res.send({
-                message:"item qty decremented"
+            res.send({
+                message: "item qty decremented"
             })
-        }else{
-            let updatedData=await CartModel.findByIdAndUpdate(existingcartItems._id,{$set:{quantity:existingcartItems.quantity+1}})
+        } else {
+            let updatedData = await CartModel.findByIdAndUpdate(existingcartItems._id, { $set: { quantity: existingcartItems.quantity + 1 } })
 
-             return res.send({
-                message:"item qty incremented"
+            return res.send({
+                message: "item qty incremented"
             })
         }
 
 
 
 
-        }catch(e){
-     return res.status(500).send("something went wrong")
-        }
+    } catch (e) {
+        return res.status(500).send("something went wrong")
+    }
 
 
 });
@@ -118,28 +117,27 @@ app.post("/update",async(req,res)=>{
 // remove route
 app.post("/remove", async (req, res) => {
 
-    let {productId}= req.body
-    let userId=req.headers.userid
+    let { productId } = req.body
+    let userId = req.headers.userid
     // console.log(type,productId,userId)
-    
-    let existingcartItems=await CartModel.findOne({userId,productId})
+
+    let existingcartItems = await CartModel.findOne({ userId, productId })
     console.log(existingcartItems)
-if(existingcartItems)
-{
+    if (existingcartItems) {
 
-try{
+        try {
 
-    await CartModel.findByIdAndDelete(existingcartItems._id)
-     return res.send("item deleted from cart")
+            await CartModel.findByIdAndDelete(existingcartItems._id)
+            return res.send("item deleted from cart")
 
-}catch{
-    return  res.status(500).send(e.message)
-}
+        } catch {
+            return res.status(500).send(e.message)
+        }
 
 
-}else{
-     return res.status(500).send("something went wrong")
-}
+    } else {
+        return res.status(500).send("something went wrong")
+    }
 
 })
 
