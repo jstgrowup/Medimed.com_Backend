@@ -29,7 +29,7 @@ app.get("/search", async (req, res) => {
           }
         }
       }, {
-        $limit: 5
+        $limit: 8
       }, {
         $project: {
           _id: 1,
