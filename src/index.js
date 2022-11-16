@@ -12,15 +12,48 @@ app.use(express.json());
 app.use(cors());
 app.use("/products", ProductRoute);
 app.use("/carts", CartRoute);
-const Razorpay = require("razorpay")
+const Razorpay = require("razorpay");
+const ProductModel = require("./models/Product.model");
+app.get("/search", async (req, res) => {
+  try {
+    const { title } = req.query
+    const agg = [
+      {
+        $search: {
+          autocomplete: {
+            query: title,
+            path: "title",
+            fuzzy: {
+              maxEdits: 2
+            }
+          }
+        }
+      }, {
+        $limit: 5
+      }, {
+        $project: {
+          _id: 1,
+          title: 1,
+          price: 1,
+          url: 1,
 
+
+        }
+      }
+    ]
+    const arr = await ProductModel.aggregate(agg)
+    res.json(arr)
+  } catch (error) {
+    console.log(error);
+  }
+})
 app.post("/order", async (req, res) => {
   const { amount } = req.body
   console.log(amount)
   try {
     var instance = new Razorpay({ key_id: process.env.RAZORPAY_KEY_ID, key_secret: process.env.RAZORPAY_KEY_SECRET })
     let order = await instance.orders.create({
-      amount: amount ,
+      amount: amount,
       currency: "INR",
       receipt: "receipt#1",
     })
