@@ -27,6 +27,7 @@
       "mongoose": "^6.6.5",
       "passport": "^0.5.3",
       "passport-google-oauth20": "^2.0.0",
+      "razorpay": "^2.8.3",
       "redis": "^4.5.0"
    },
    "devDependencies": {
