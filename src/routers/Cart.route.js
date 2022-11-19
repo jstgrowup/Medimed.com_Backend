@@ -25,6 +25,8 @@ app.get("/", async (req, res) => {
   let data = await CartModel.find({ userId: req.userId }).populate([
     "userId",
     "productId",
+
+    
   ]);
 
   return res.send(data);
