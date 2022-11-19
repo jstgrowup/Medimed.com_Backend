@@ -17,6 +17,7 @@ const ProductModel = require("./models/Product.model");
 app.get("/search", async (req, res) => {
   try {
     const { title } = req.query
+
     const agg = [
       {
         $search: {
@@ -42,6 +43,7 @@ app.get("/search", async (req, res) => {
       }
     ]
     const arr = await ProductModel.aggregate(agg)
+
     res.json(arr)
   } catch (error) {
     console.log(error);
