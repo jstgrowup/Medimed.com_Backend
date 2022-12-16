@@ -49,13 +49,15 @@ app.post("/getViaPhonenumber", async (req, res) => {
   let huru = phnumber.trim("").split("").map(Number);
   let arr = huru.slice(3, 13);
   arr = arr.join("");
-  const data = await UserModel.findOne({ phnumber: arr });
-  if (!data) {
-    res.status(404).send("user not found");
-  } else if (data) {
-    res.send(data);
-  } else {
-    res.status(404).send("invalid request");
+  try {
+    const data = await UserModel.findOne({ phnumber: arr });
+    if (data) {
+      res.send(data);
+    } else {
+      res.status(404).send("User Doesnt exist");
+    }
+  } catch (error) {
+    res.status(404).send(`${error.message}`);
   }
 });
 // router.get("/", (req, res, next) => {
