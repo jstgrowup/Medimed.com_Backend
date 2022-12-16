@@ -12,8 +12,8 @@ app.post("/getuser", async (req, res) => {
   }
 });
 app.post("/postUserViaForm", async (req, res) => {
-  const { email } = req.body;
-  const data = await UserModel.findOne({ email: email });
+  const { phnumber } = req.body;
+  const data = await UserModel.findOne({ phnumber: phnumber });
 
   if (data) {
     res.status(404).send("User Already exists");

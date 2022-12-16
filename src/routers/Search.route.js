@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express.Router();
 const ProductModel = require("../models/Product.model");
-app.get("/search", async (req, res) => {
+app.get("/get", async (req, res) => {
   try {
     const { title } = req.query;
 
@@ -32,6 +32,8 @@ app.get("/search", async (req, res) => {
     const arr = await ProductModel.aggregate(agg);
 
     res.json(arr);
-  } catch (error) {}
+  } catch (error) {
+    res.status(404).send(`${error.message}`);
+  }
 });
 module.exports = app;
