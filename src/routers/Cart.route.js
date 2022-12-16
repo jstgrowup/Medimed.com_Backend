@@ -3,7 +3,10 @@ const CartModel = require("../models/Cart.model");
 
 const app = express.Router();
 
-
+// ,{
+//     headers:{userid:"636d1da8f6cde62d954b2473"}
+//   }
+//auth
 const authMiddleware = (req, res, next) => {
   let userId = req.headers.userid;
 
@@ -25,16 +28,14 @@ app.get("/", async (req, res) => {
   let data = await CartModel.find({ userId: req.userId }).populate([
     "userId",
     "productId",
-
-    
   ]);
-
   return res.send(data);
 });
 
 app.post("/create", async (req, res) => {
   let { productId, quantity } = req.body;
   let userId = req.userId;
+  console.log("userId:", userId);
 
   let existingcartItems = await CartModel.findOne({ userId, productId });
 
@@ -77,7 +78,7 @@ app.post("/update", async (req, res) => {
         existingcartItems._id,
         { $set: { quantity: existingcartItems.quantity - 1 } }
       );
-      console.log(existingcartItems);
+      // console.log(existingcartItems);
       res.send({
         message: "item qty decremented",
       });
@@ -103,7 +104,7 @@ app.post("/remove", async (req, res) => {
   // console.log(type,productId,userId)
 
   let existingcartItems = await CartModel.findOne({ userId, productId });
-  console.log(existingcartItems);
+  // console.log(existingcartItems);
   if (existingcartItems) {
     try {
       await CartModel.findByIdAndDelete(existingcartItems._id);
