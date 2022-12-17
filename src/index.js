@@ -11,6 +11,7 @@ require("dotenv").config();
 const port = process.env.PORT || 8080;
 const app = express();
 const userRoute = require("./routers/User.routes");
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
@@ -20,23 +21,6 @@ app.use("/admin", AdminRoute);
 app.use("/auth", userRoute);
 app.use("/search", SearchRoute);
 app.use("/payment", PaymentRoute);
-app.get("/redisdata", async (req, res) => {
-  try {
-    let data = await redisClient.get("userdata");
-    data = JSON.parse(data);
-    if (!data) res.status(404).send("no user found");
-    else {
-      res.send(data);
-    }
-  } catch (error) {
-    res.status(404).send(error.message);
-  }
-});
-
-app.post("/redisLogout", async (req, res) => {
-  const data = await redisClient.del("userdata");
-  res.redirect("https://medimed.netlify.app");
-});
 
 app.listen(port, async () => {
   await Connect();
