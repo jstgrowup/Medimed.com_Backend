@@ -23,19 +23,17 @@ app.use(authMiddleware);
 
 ///routes
 app.get("/", async (req, res) => {
-  // console.log(req.userId)
-
   let data = await CartModel.find({ userId: req.userId }).populate([
     "userId",
     "productId",
   ]);
+
   return res.send(data);
 });
 
 app.post("/create", async (req, res) => {
   let { productId, quantity } = req.body;
   let userId = req.userId;
-  console.log("userId:", userId);
 
   let existingcartItems = await CartModel.findOne({ userId, productId });
 
