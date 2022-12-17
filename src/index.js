@@ -21,7 +21,9 @@ app.use("/admin", AdminRoute);
 app.use("/auth", userRoute);
 app.use("/search", SearchRoute);
 app.use("/payment", PaymentRoute);
-
+app.get("/",(req, res)=>{
+  res.send("<h1>All Good Ready to integrate</h1>")
+})
 app.listen(port, async () => {
   await Connect();
   console.log("Server started on port 8080");
