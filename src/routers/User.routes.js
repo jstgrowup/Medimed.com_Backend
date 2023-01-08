@@ -12,7 +12,7 @@ app.post("/getuser", async (req, res) => {
   }
 });
 app.post("/postUserViaForm", async (req, res) => {
-  console.log("req:", req.body);
+
   const { phnumber } = req.body;
   try {
     const data = await UserModel.findOne({ phnumber: phnumber });

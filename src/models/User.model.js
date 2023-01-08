@@ -18,7 +18,7 @@ const UserSchema = new Schema({
     type: String,
     validate(value) {
       if (!validator.isMobilePhone(value)) {
-        console.log("value:", value);
+      
         throw new Error("Invalid Phone Number");
       }
       if (
