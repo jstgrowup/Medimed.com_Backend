@@ -1,5 +1,5 @@
 const express = require("express");
-const passport = require("passport");
+
 const UserModel = require("../models/User.model");
 const app = express.Router();
 app.post("/getuser", async (req, res) => {
@@ -12,16 +12,17 @@ app.post("/getuser", async (req, res) => {
   }
 });
 app.post("/postUserViaForm", async (req, res) => {
+  console.log("req:", req.body);
   const { phnumber } = req.body;
-  const data = await UserModel.findOne({ phnumber: phnumber });
-
-  if (data) {
-    res.status(404).send("User Already exists");
-  } else if (!data) {
-    const huru = await UserModel.create(req.body);
-    res.send(huru);
-  } else {
-    res.status(404).send("invalid request");
+  try {
+    const data = await UserModel.findOne({ phnumber: phnumber });
+    if (data) {
+      return res.status(404).send({ message: "User Already exists" });
+    }
+    await UserModel.create(req.body);
+    return res.status(200).send({ message: "OK" });
+  } catch (error) {
+    return res.status(404).send(error);
   }
 });
 app.post("/google", async (req, res) => {
@@ -60,24 +61,6 @@ app.post("/getViaPhonenumber", async (req, res) => {
     res.status(404).send(`${error.message}`);
   }
 });
-// router.get("/", (req, res, next) => {
-//   res.render("login");
-// });
 
-// router.get("/google", passport.authenticate("google", { scope: ["profile"] }));
-
-// router.get(
-//   "/google/callback",
-//   passport.authenticate("google", { failureRedirect: "/auth" }),
-//   function (req, res) {
-//     res.send("nice bruh");
-//     // res.redirect("http://localhost:5173/login");
-//   }
-// );
-
-// router.get("/logout", (req, res, next) => {
-//   req.logout();
-//   res.redirect("/auth");
-// });
 
 module.exports = app;
