@@ -14,16 +14,20 @@ const userRoute = require("./routers/User.routes");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://medimed-com.vercel.app",
+  })
+);
 app.use("/products", ProductRoute);
 app.use("/carts", CartRoute);
 app.use("/admin", AdminRoute);
 app.use("/auth", userRoute);
 app.use("/search", SearchRoute);
 app.use("/payment", PaymentRoute);
-app.get("/",(req, res)=>{
-  res.send("<h1>All Good Ready to integrate</h1>")
-})
+app.get("/", (req, res) => {
+  res.send("<h1>All Good Ready to integrate</h1>");
+});
 app.listen(port, async () => {
   await Connect();
   console.log("Server started on port 8080");
