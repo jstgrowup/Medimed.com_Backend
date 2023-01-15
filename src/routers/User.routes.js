@@ -12,11 +12,14 @@ app.post("/getuser", async (req, res) => {
   }
 });
 app.post("/postUserViaForm", async (req, res) => {
-
-  const { phnumber } = req.body;
+  const { phnumber, email } = req.body;
   try {
     const data = await UserModel.findOne({ phnumber: phnumber });
     if (data) {
+      return res.status(404).send({ message: "User Already exists" });
+    }
+    const emaildata = await UserModel.findOne({ email: email });
+    if (emaildata) {
       return res.status(404).send({ message: "User Already exists" });
     }
     await UserModel.create(req.body);
@@ -61,6 +64,5 @@ app.post("/getViaPhonenumber", async (req, res) => {
     res.status(404).send(`${error.message}`);
   }
 });
-
 
 module.exports = app;
