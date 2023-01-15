@@ -15,7 +15,9 @@ const userRoute = require("./routers/User.routes");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
-  cors()
+  cors({
+    origin: "https://medimed-com.vercel.app",
+  })
 );
 app.use("/products", ProductRoute);
 app.use("/carts", CartRoute);
